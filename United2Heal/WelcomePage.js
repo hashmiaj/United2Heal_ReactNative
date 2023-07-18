@@ -33,7 +33,6 @@ const WelcomePage = () => {
         <TouchableOpacity style={[styles.button, styles.adminButton]} onPress={handleVolunteerPress}>
             <Text style={styles.buttonText}>Volunteer</Text>
         </TouchableOpacity>
-        {myIcon}
     </View>
   );
 };
