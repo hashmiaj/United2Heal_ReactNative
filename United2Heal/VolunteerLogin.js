@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, Animated } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, Animated, TextInput, SafeAreaView } from 'react-native';
 
-const WelcomePage = () => {
+const VolunteerLoginPage = () => {
   
   const handleVolunteerPress = () => {
     // Handle Volunteer button press
@@ -13,6 +13,8 @@ const WelcomePage = () => {
     console.log('Admin button pressed');
   };
 
+  const [text, onChangeText] = React.useState('Useless Text');
+
   return (
     <View style={styles.container}>
         <Image
@@ -20,28 +22,45 @@ const WelcomePage = () => {
             style={styles.image}
         />
         <Text style={styles.title}>United2Heal</Text>
-        <Text style={styles.description}>Please select between the options below:</Text>
+        <Text style={styles.description}>Please Enter Your Name</Text>
+        <SafeAreaView>
+        <TextInput
+        style={styles.input}
+        onChangeText={onChangeText}
+        value={text}
+        placeholder="useless placeholder"
+        />
+      </SafeAreaView>
         <TouchableOpacity
             style={styles.button}
         >
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.button, styles.adminButton]} onPress={handleAdminPress}>
-            <Text style={styles.buttonText}>Admin</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={[styles.button, styles.adminButton]} onPress={handleVolunteerPress}>
-            <Text style={styles.buttonText}>Volunteer</Text>
-        </TouchableOpacity>
+        
+        <View style={styles.buttonsContainer}>
+            <TouchableOpacity style={[styles.button, styles.cancelButton]} onPress={handleAdminPress}>
+                <Text style={styles.buttonText}>Go Back</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.button, styles.submitButton]} onPress={handleVolunteerPress}>
+                <Text style={styles.buttonText}>Submit</Text>
+            </TouchableOpacity>
+        </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 16,
     backgroundColor: '#ffffff',
+  },
+  buttonsContainer: {
+    flex: 0,
+    paddingHorizontal: 16,
+    backgroundColor: '#ffffff',
+    flexDirection: 'row',
   },
   image: {
     width: 200,
@@ -60,24 +79,30 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   button: {
-    width: '100%',
+    width: '50%',
     height: 50,
     borderRadius: 25,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 16,
+    marginHorizontal: 8,
   },
   buttonText: {
     color: '#ffffff',
     fontSize: 16,
     fontWeight: 'bold',
   },
-  adminButton: {
+  submitButton: {
     backgroundColor: '#4285F4',
+  },
+  cancelButton: {
+    backgroundColor: '#D3D3D3',
+  },
+  input: {
+    backgroundColor: "white"
   },
 });
 
-export default WelcomePage;
-
+export default VolunteerLoginPage;
 
 

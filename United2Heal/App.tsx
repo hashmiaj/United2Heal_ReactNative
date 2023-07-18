@@ -20,7 +20,8 @@ import {
 import {
   Colors,
 } from 'react-native/Libraries/NewAppScreen';
-import Welcome from './WelcomePage';
+import WelcomePage from './WelcomePage';
+import VolunteerLoginPage from './VolunteerLogin';
 
 function App(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -30,7 +31,7 @@ function App(): JSX.Element {
   };
 
   return (
-      <Welcome />
+      <VolunteerLoginPage/>
   );
 }
 
