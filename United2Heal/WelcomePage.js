@@ -1,10 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, Animated } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
-const myIcon = <Icon name="user" size={30} color="#900" />;
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
 const WelcomePage = () => {
-  
+    const icon = <Icon name={'comments'} solid />;
   const handleVolunteerPress = () => {
     // Handle Volunteer button press
     console.log('Volunteer button pressed');
@@ -28,10 +27,16 @@ const WelcomePage = () => {
         >
         </TouchableOpacity>
         <TouchableOpacity style={[styles.button, styles.adminButton]} onPress={handleAdminPress}>
+            <View style={{flexDirection:'row', alignItems:'center'}}>
+            <Icon name="user-md" size={24} color="#000000" style={{marginRight:8}} solid/>
             <Text style={styles.buttonText}>Admin</Text>
+            </View>
         </TouchableOpacity>
         <TouchableOpacity style={[styles.button, styles.adminButton]} onPress={handleVolunteerPress}>
+        <View style={{flexDirection:'row', alignItems:'center'}}>
+            <Icon name="user" size={24} color="#000000" style={{marginRight:8}} solid/>
             <Text style={styles.buttonText}>Volunteer</Text>
+            </View>
         </TouchableOpacity>
     </View>
   );
