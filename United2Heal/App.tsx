@@ -8,6 +8,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import WelcomePage from './WelcomePage';
 import AdminScreen from './AdminScreen'; // Import your AdminScreen component
 import VolunteerScreen from './VolunteerScreen'; // Import your VolunteerScreen component
+import NewVolunteerScreen from './NewVolunteerScreen';// Import your NewVolunteerScreen component
 
 const Stack = createNativeStackNavigator();
 
@@ -18,6 +19,7 @@ function App() {
         <Stack.Screen name="Welcome" component={WelcomePage} />
         <Stack.Screen name="AdminScreen" component={AdminScreen} />
         <Stack.Screen name="VolunteerScreen" component={VolunteerScreen} />
+        <Stack.Screen name="NewVolunteerScreen" component={NewVolunteerScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -8,9 +8,13 @@ const AdminScreen = () => {
   const [password, setPassword] = useState('');
 
   const handleLogin = () => {
-    // Handle the login logic here
-    console.log('Username: ', username);
-    console.log('Password: ', password);
+    if (username === '' || password === '') {
+      Alert.alert('Error', 'Please fill out all fields.');
+      return;
+    }
+    // Handle the submit logic here
+    console.log('Full Name: ', fullName);
+    console.log('Session Group: ', sessionGroup);
   };
 
   return (
