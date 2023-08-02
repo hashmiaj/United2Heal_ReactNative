@@ -9,6 +9,7 @@ import WelcomePage from './WelcomePage';
 import AdminScreen from './AdminScreen'; // Import your AdminScreen component
 import VolunteerScreen from './VolunteerScreen'; // Import your VolunteerScreen component
 import NewVolunteerScreen from './NewVolunteerScreen';// Import your NewVolunteerScreen component
+import NewAdminScreen from './NewAdminScreen';// Import your NewAdminScreen component
 
 const Stack = createNativeStackNavigator();
 
@@ -20,6 +21,7 @@ function App() {
         <Stack.Screen name="AdminScreen" component={AdminScreen} />
         <Stack.Screen name="VolunteerScreen" component={VolunteerScreen} />
         <Stack.Screen name="NewVolunteerScreen" component={NewVolunteerScreen} />
+        <Stack.Screen name="NewAdminScreen" component={NewAdminScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

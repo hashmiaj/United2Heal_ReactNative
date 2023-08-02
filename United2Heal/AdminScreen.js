@@ -1,20 +1,28 @@
 // AdminScreen.js
 
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
 
-const AdminScreen = () => {
+const AdminScreen = ({ navigation }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [attemptCount, setAttemptCount] = useState(0);
+
+  const correctUsername = 'admin';
+  const correctPassword = 'password123';
 
   const handleLogin = () => {
-    if (username === '' || password === '') {
-      Alert.alert('Error', 'Please fill out all fields.');
-      return;
+    if (username !== correctUsername || password !== correctPassword) {
+      setAttemptCount(attemptCount + 1);
+      if (attemptCount >= 2) {
+        Alert.alert('Error', 'You have entered incorrect credentials 3 times. You will be redirected to the welcome page.');
+        navigation.navigate('Welcome');
+      } else {
+        Alert.alert('Error', 'Incorrect username or password. Please try again.');
+      }
+    } else {
+      navigation.navigate('NewAdminScreen');
     }
-    // Handle the submit logic here
-    console.log('username: ', username);
-    console.log('password: ', password);
   };
 
   return (
