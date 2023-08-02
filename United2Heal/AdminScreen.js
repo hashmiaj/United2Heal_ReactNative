@@ -13,8 +13,8 @@ const AdminScreen = () => {
       return;
     }
     // Handle the submit logic here
-    console.log('Full Name: ', fullName);
-    console.log('Session Group: ', sessionGroup);
+    console.log('username: ', username);
+    console.log('password: ', password);
   };
 
   return (
