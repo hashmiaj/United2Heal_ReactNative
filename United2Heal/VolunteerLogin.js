@@ -17,6 +17,7 @@ const VolunteerLoginPage = ({ onLogin }) => {
     onLogin();
     console.log('Submit button pressed');
   };
+  const [volunteerName, setVolunteerName] = useState('');
 
   const [text, onChangeText] = React.useState('Useless Text');
 
@@ -28,14 +29,13 @@ const VolunteerLoginPage = ({ onLogin }) => {
         />
         <Text style={styles.title}>United2Heal</Text>
         <Text style={styles.description}>Please Enter Your Name</Text>
-        <SafeAreaView>
-        <TextInput
-        style={styles.input}
-        onChangeText={onChangeText}
-        value={text}
-        placeholder="useless placeholder"
-        />
-      </SafeAreaView>
+        <View>
+        <TextInput 
+        style={styles.input} 
+        value={volunteerName} 
+        onChangeText={(text) => setVolunteerName(text)} 
+      />
+      </View>
         <TouchableOpacity
             style={styles.button}
         >
@@ -104,10 +104,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#D3D3D3',
   },
   input: {
-    backgroundColor: "white"
+    borderColor: 'gray',
+    borderWidth: 1,
+    flexDirection: 'column',
   },
 });
 
-export default VolunteerLoginPage;
+export default VolunteerLogin;
 
-
+// Add a please select your group drop down menu using https://gorhom.github.io/react-native-bottom-sheet/

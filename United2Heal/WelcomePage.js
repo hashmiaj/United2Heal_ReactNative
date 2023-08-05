@@ -11,13 +11,13 @@ const WelcomePage = ({ navigation }) => {
 
     const handleVolunteerPress = () => {
       // Handle Volunteer button press
-      //navigation.navigate('VolunteerScreen');
+      navigation.navigate('VolunteerLogin');
       console.log('Volunteer button pressed');
     };
 
     const handleAdminPress = () => {
       // Handle Admin button press
-      //navigation.navigate('AdminScreen');
+      navigation.navigate('AdminScreen');
       console.log('Admin button pressed');
     };
 
@@ -34,13 +34,13 @@ const WelcomePage = ({ navigation }) => {
             style={styles.button}
         >
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.button, styles.adminButton]} onPress={() => navigation.navigate('AdminScreen')}>
+        <TouchableOpacity style={[styles.button, styles.adminButton]} onPress={handleAdminPress}>
             <View style={{flexDirection:'row', alignItems:'center'}}>
             <Icon name="user-md" size={24} color="#000000" style={{marginRight:8}} solid/>
             <Text style={styles.buttonText}>Admin</Text>
             </View>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.button, styles.adminButton]} onPress={() => navigation.navigate('VolunteerLogin')}>
+        <TouchableOpacity style={[styles.button, styles.adminButton]} onPress={handleVolunteerPress}>
         <View style={{flexDirection:'row', alignItems:'center'}}>
             <Icon name="user" size={24} color="#000000" style={{marginRight:8}} solid/>
             <Text style={styles.buttonText}>Volunteer</Text>
