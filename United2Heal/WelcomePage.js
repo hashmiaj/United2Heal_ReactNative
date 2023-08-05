@@ -1,9 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, Animated } from 'react-native';
-<<<<<<< Updated upstream
-=======
-import VolunteerLoginPage from './VolunteerLogin';
->>>>>>> Stashed changes
 
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { NavigationContainer } from '@react-navigation/native';
