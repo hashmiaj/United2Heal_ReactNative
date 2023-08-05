@@ -1,17 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, Animated, TextInput, SafeAreaView } from 'react-native';
 
-const VolunteerLoginPage = () => {
+const VolunteerLogin = ({ navigation }) => {
   
-  const handleVolunteerPress = () => {
-    // Handle Volunteer button press
-    console.log('Volunteer button pressed');
+  const handleGoBackPress = () => {
+    // Handle Go Back button press
+    navigation.goBack();
   };
-
-  const handleAdminPress = () => {
-    // Handle Admin button press
-    console.log('Admin button pressed');
+  const handleSubmitPress = () => {
+    // Handle Submit button press
   };
+  const [volunteerName, setVolunteerName] = useState('');
 
   const [text, onChangeText] = React.useState('Useless Text');
 
@@ -23,24 +22,23 @@ const VolunteerLoginPage = () => {
         />
         <Text style={styles.title}>United2Heal</Text>
         <Text style={styles.description}>Please Enter Your Name</Text>
-        <SafeAreaView>
-        <TextInput
-        style={styles.input}
-        onChangeText={onChangeText}
-        value={text}
-        placeholder="useless placeholder"
-        />
-      </SafeAreaView>
+        <View>
+        <TextInput 
+        style={styles.input} 
+        value={volunteerName} 
+        onChangeText={(text) => setVolunteerName(text)} 
+      />
+      </View>
         <TouchableOpacity
             style={styles.button}
         >
         </TouchableOpacity>
         
         <View style={styles.buttonsContainer}>
-            <TouchableOpacity style={[styles.button, styles.cancelButton]} onPress={handleAdminPress}>
+            <TouchableOpacity style={[styles.button, styles.cancelButton]} onPress={handleGoBackPress}>
                 <Text style={styles.buttonText}>Go Back</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.button, styles.submitButton]} onPress={handleVolunteerPress}>
+            <TouchableOpacity style={[styles.button, styles.submitButton]} onPress={handleSubmitPress}>
                 <Text style={styles.buttonText}>Submit</Text>
             </TouchableOpacity>
         </View>
@@ -99,10 +97,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#D3D3D3',
   },
   input: {
-    backgroundColor: "white"
+    borderColor: 'gray',
+    borderWidth: 1,
+    flexDirection: 'column',
   },
 });
 
-export default VolunteerLoginPage;
+export default VolunteerLogin;
 
-
+// Add a please select your group drop down menu using https://gorhom.github.io/react-native-bottom-sheet/
