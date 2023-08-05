@@ -1,16 +1,21 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, Animated, TextInput, SafeAreaView } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, TextInput, SafeAreaView } from 'react-native';
 
-const VolunteerLoginPage = () => {
-  
-  const handleVolunteerPress = () => {
-    // Handle Volunteer button press
-    console.log('Volunteer button pressed');
+const VolunteerLoginPage = ({ onLogin }) => {
+
+  const navigation = useNavigation();
+
+  const handleGoBackPress = () => {
+    // Handle Go Back button press
+    navigation.goBack();
+    console.log('Go back button pressed');
   };
 
-  const handleAdminPress = () => {
-    // Handle Admin button press
-    console.log('Admin button pressed');
+  const handleSubmitPress = () => {
+    // Handle Submit button press
+    onLogin();
+    console.log('Submit button pressed');
   };
 
   const [text, onChangeText] = React.useState('Useless Text');
@@ -37,10 +42,10 @@ const VolunteerLoginPage = () => {
         </TouchableOpacity>
         
         <View style={styles.buttonsContainer}>
-            <TouchableOpacity style={[styles.button, styles.cancelButton]} onPress={handleAdminPress}>
+            <TouchableOpacity style={[styles.button, styles.cancelButton]} onPress={handleGoBackPress}>
                 <Text style={styles.buttonText}>Go Back</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.button, styles.submitButton]} onPress={handleVolunteerPress}>
+            <TouchableOpacity style={[styles.button, styles.submitButton]} onPress={() => handleSubmitPress()}>
                 <Text style={styles.buttonText}>Submit</Text>
             </TouchableOpacity>
         </View>

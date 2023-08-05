@@ -40,7 +40,7 @@ const WelcomePage = ({ navigation }) => {
             <Text style={styles.buttonText}>Admin</Text>
             </View>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.button, styles.adminButton]} onPress={() => navigation.navigate('VolunteerScreen')}>
+        <TouchableOpacity style={[styles.button, styles.adminButton]} onPress={() => navigation.navigate('VolunteerLogin')}>
         <View style={{flexDirection:'row', alignItems:'center'}}>
             <Icon name="user" size={24} color="#000000" style={{marginRight:8}} solid/>
             <Text style={styles.buttonText}>Volunteer</Text>
@@ -52,7 +52,7 @@ const WelcomePage = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 16,
