@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { View, Text, Image, StyleSheet, TouchableOpacity, TextInput, SafeAreaView } from 'react-native';
 
-const VolunteerLoginPage = ({ onLogin }) => {
+const VolunteerLogin = ({ onLogin }) => {
 
   const navigation = useNavigation();
 

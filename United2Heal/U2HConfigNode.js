@@ -1,26 +1,47 @@
 //U2HConfigNode.js is used to set global variables that can be reused throughout the app. 
 
-export let VolunteerName = '';
-export let GroupName = '';
-export let UserRole = '';
+let VolunteerName = '';
+let GroupName = '';
+let UserRole = '';
+let SearchItemsList = [];
 
 export function getVolunteerName() {
-    return this.VolunteerName;
+  return VolunteerName;
 }
 export function setVolunteerName(newVolunteerName) {
-    this.VolunteerName = newVolunteerName;
+  VolunteerName = newVolunteerName;
 }
 
 export function getGroupName() {
-    return this.GroupName;
+  return GroupName;
 }
 export function setGroupName(newGroupName) {
-    this.GroupName = newGroupName;
+  GroupName = newGroupName;
 }
 
 export function getUserRole() {
-    return this.UserRole;
+  return UserRole;
 }
 export function setUserRole(newUserRole) {
-    this.UserRole = newUserRole;
+  UserRole = newUserRole;
 }
+
+export function getSearchItemsList() {
+  return SearchItemsList;
+}
+export function setSearchItemsList(newSearchItemList) {
+  SearchItemsList = newSearchItemList;
+}
+
+const U2HConfigNode = {
+  getVolunteerName,
+  setVolunteerName,
+  getGroupName,
+  setGroupName,
+  getUserRole,
+  setUserRole,
+  getSearchItemsList,
+  setSearchItemsList,
+};
+
+export default U2HConfigNode;
