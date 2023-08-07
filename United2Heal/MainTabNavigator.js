@@ -5,6 +5,7 @@ import { BottomTabBar, createBottomTabNavigator } from '@react-navigation/bottom
 import HomeTab from './HomeTab';
 import SearchTab from './SearchTab';
 import SettingsTab from './SettingsTab';
+import NewVolunteerScreen from './NewVolunteerScreen';
 import Icon from 'react-native-vector-icons/FontAwesome'; // Import your desired icon library
 import Item from './Item';
 import U2HConfigNode from './U2HConfigNode';
@@ -57,26 +58,31 @@ const MainTabNavigator = () => {
         </View>
       ) :
     <Tab.Navigator
-        screenOptions={({ route }) => ({
-            tabBarIcon: ({ focused, color, size }) => {
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
             let iconName;
             if (route.name === 'Home') {
-                iconName = 'home'; 
-                color = focused ? "#0096FF" : "#000000";
+              iconName = 'home'; 
+              color = focused ? "#0096FF" : "#000000";
             } else if (route.name === 'Search') {
-                iconName = 'search';
-                color = focused ? "#0096FF" : "#000000";
+              iconName = 'search';
+              color = focused ? "#0096FF" : "#000000";
             } else if (route.name === 'Settings') {
-                iconName = 'cog';
-                color = focused ? "#0096FF" : "#000000";
+              iconName = 'cog';
+              color = focused ? "#0096FF" : "#000000";
+            } else if (route.name === 'Add Item') {
+              iconName = 'plus';  // This is the line you'll add for the "plus" icon
+              color = focused ? "#0096FF" : "#000000";
             }
-            return <Icon name={iconName} size={size} color={color} />;
-            },
-        })}
+          return <Icon name={iconName} size={size} color={color} />;
+          },
+      })}
+  
         options={{ headerShown: false }}
       >
       <Tab.Screen name="Home" component={HomeTab} />
       <Tab.Screen name="Search" component={SearchTab} />
+      <Tab.Screen name="Add Item" component={NewVolunteerScreen} />
       <Tab.Screen name="Settings" component={SettingsTab} />
     </Tab.Navigator>
   );
