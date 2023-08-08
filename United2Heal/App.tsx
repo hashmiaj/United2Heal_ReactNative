@@ -26,7 +26,9 @@ function App() {
       {!isLoggedIn ? 
         (<LoginNavigationStack.Navigator initialRouteName="Welcome">
           <LoginNavigationStack.Screen name="Welcome" component={WelcomePage} />
-          <LoginNavigationStack.Screen name="AdminScreen" component={AdminScreen} />
+          <LoginNavigationStack.Screen name="AdminScreen">
+          {() => <AdminScreen onLogin={handleLogin} />}
+          </LoginNavigationStack.Screen>
           <LoginNavigationStack.Screen name="VolunteerLogin">
             {() => <VolunteerLogin onLogin={handleLogin} />}
           </LoginNavigationStack.Screen>

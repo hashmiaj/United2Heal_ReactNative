@@ -3,8 +3,9 @@ import { useNavigation } from '@react-navigation/native';
 import { View, Text, Image, StyleSheet, TouchableOpacity, TextInput, SafeAreaView } from 'react-native';
 
 const VolunteerLogin = ({ onLogin }) => {
-
   const navigation = useNavigation();
+  
+  const [volunteerName, setVolunteerName] = useState('');
 
   const handleGoBackPress = () => {
     // Handle Go Back button press
@@ -17,9 +18,6 @@ const VolunteerLogin = ({ onLogin }) => {
     onLogin();
     console.log('Submit button pressed');
   };
-  const [volunteerName, setVolunteerName] = useState('');
-
-  const [text, onChangeText] = React.useState('Useless Text');
 
   return (
     <View style={styles.container}>
@@ -28,14 +26,12 @@ const VolunteerLogin = ({ onLogin }) => {
             style={styles.image}
         />
         <Text style={styles.title}>United2Heal</Text>
-        <Text style={styles.description}>Please Enter Your Name</Text>
-        <View>
+        <Text style={styles.description}>Please Enter Your Name:</Text>
         <TextInput 
         style={styles.input} 
         value={volunteerName} 
         onChangeText={(text) => setVolunteerName(text)} 
       />
-      </View>
         <TouchableOpacity
             style={styles.button}
         >
@@ -61,17 +57,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     backgroundColor: '#ffffff',
   },
-  buttonsContainer: {
-    flex: 0,
-    paddingHorizontal: 16,
-    backgroundColor: '#ffffff',
-    flexDirection: 'row',
-  },
   image: {
     width: 200,
     height: 200,
     resizeMode: 'contain',
     marginBottom: 40,
+  },
+  buttonsContainer: {
+    flex: 0,
+    paddingHorizontal: 16,
+    backgroundColor: '#ffffff',
+    flexDirection: 'row',
   },
   title: {
     fontSize: 35,
@@ -104,8 +100,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#D3D3D3',
   },
   input: {
-    borderColor: 'gray',
+    width: '85%',
     borderWidth: 1,
+    borderColor: 'gray',
     flexDirection: 'column',
   },
 });
