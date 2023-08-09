@@ -8,8 +8,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Provider as PaperProvider } from 'react-native-paper';
 import MainTabNavigator from './MainTabNavigator';
 import WelcomePage from './WelcomePage';
-import AdminScreen from './AdminScreen'; // Import your AdminScreen component
-import VolunteerLogin from './VolunteerLogin'; // Import your VolunteerScreen component
+import AdminScreen from './AdminScreen';
+import VolunteerLogin from './VolunteerLogin';
 
 const LoginNavigationStack = createNativeStackNavigator();
 

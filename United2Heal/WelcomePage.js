@@ -6,21 +6,18 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 const WelcomePage = ({ navigation }) => {
-    const icon = <Icon name={'comments'} solid />;
 
-
+    // Handle Volunteer button press
     const handleVolunteerPress = () => {
-      // Handle Volunteer button press
       navigation.navigate('VolunteerLogin');
       console.log('Volunteer button pressed');
     };
 
+    // Handle Admin button press
     const handleAdminPress = () => {
-      // Handle Admin button press
       navigation.navigate('AdminScreen');
       console.log('Admin button pressed');
     };
-
 
   return (
     <View style={styles.container}>

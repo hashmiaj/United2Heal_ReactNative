@@ -5,7 +5,7 @@ import { BottomTabBar, createBottomTabNavigator } from '@react-navigation/bottom
 import HomeTab from './HomeTab';
 import SearchTab from './SearchTab';
 import SettingsTab from './SettingsTab';
-import NewVolunteerScreen from './NewVolunteerScreen';
+import AddItemTab from './AddItemTab';
 import Icon from 'react-native-vector-icons/FontAwesome'; // Import your desired icon library
 import Item from './Item';
 import U2HConfigNode from './U2HConfigNode';
@@ -23,7 +23,6 @@ const MainTabNavigator = () => {
         'https://pjg9px1sqf.execute-api.us-east-1.amazonaws.com/getSearchItems'
       );
       if (!response.ok) {
-        console.log(response.status);
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
@@ -35,8 +34,6 @@ const MainTabNavigator = () => {
       setSearchItems(itemsData);
       // Set the items and store it in the U2HConfigNode
       U2HConfigNode.setSearchItemsList(itemsData);
-
-      console.log(U2HConfigNode.getSearchItemsList());
     } catch (error) {
       console.log(error.message);
       Alert.alert('Error', error.message); // Show the actual error message
@@ -82,7 +79,7 @@ const MainTabNavigator = () => {
       >
       <Tab.Screen name="Home" component={HomeTab} />
       <Tab.Screen name="Search" component={SearchTab} />
-      <Tab.Screen name="Add Item" component={NewVolunteerScreen} />
+      <Tab.Screen name="Add Item" component={AddItemTab} />
       <Tab.Screen name="Settings" component={SettingsTab} />
     </Tab.Navigator>
   );
@@ -95,7 +92,7 @@ const styles = StyleSheet.create({
       alignItems: 'center', // Center horizontally
     },
     loading: {
-      marginTop: 20, // Optional: Add some spacing from the top
+      marginTop: 20, 
     },
   });
 

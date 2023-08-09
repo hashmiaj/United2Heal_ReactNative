@@ -3,7 +3,7 @@ import { Button, View, Text, StyleSheet, TextInput, Alert, ActivityIndicator, To
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 
-const NewVolunteerScreen = () => {
+const AddItemTab = () => {
   const [itemName, setItemName] = useState('');
   const [isLoading, setIsLoading] = useState(false);  // New state variable for loading
   const icon = <Icon name={'comments'} solid />;
@@ -39,7 +39,6 @@ const NewVolunteerScreen = () => {
           <TextInput  style={styles.input}  onChangeText={setItemName}  value={itemName}  placeholder="Item Name"/>
           <TouchableOpacity style={styles.button} onPress={addItem}>
             <View style={styles.buttonContent}>
-              <Icon name="plus" size={24} color="white" style={styles.icon} />
               <Text style={styles.buttonText}>Submit</Text>
             </View>
           </TouchableOpacity>
@@ -96,4 +95,4 @@ const styles = StyleSheet.create({
   },  
 });
 
-export default NewVolunteerScreen;
+export default AddItemTab;

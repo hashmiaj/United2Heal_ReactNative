@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { View, Text, Image, StyleSheet, TouchableOpacity, TextInput, SafeAreaView } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, TextInput, SafeAreaView, KeyboardAvoidingView } from 'react-native';
 
 const VolunteerLogin = ({ onLogin }) => {
   const navigation = useNavigation();
@@ -20,6 +20,7 @@ const VolunteerLogin = ({ onLogin }) => {
   };
 
   return (
+    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
     <View style={styles.container}>
         <Image
             source={require('./img/u2hlogo.png')}
@@ -31,7 +32,7 @@ const VolunteerLogin = ({ onLogin }) => {
         style={styles.input} 
         value={volunteerName} 
         onChangeText={(text) => setVolunteerName(text)} 
-      />
+        />
         <TouchableOpacity
             style={styles.button}
         >
@@ -46,6 +47,7 @@ const VolunteerLogin = ({ onLogin }) => {
             </TouchableOpacity>
         </View>
     </View>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -100,6 +102,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#D3D3D3',
   },
   input: {
+    height: 40,
     width: '85%',
     borderWidth: 1,
     borderColor: 'gray',
