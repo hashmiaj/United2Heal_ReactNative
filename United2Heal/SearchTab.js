@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, FlatList, TextInput, TouchableOpacity } from 'react-native';
-import { getSearchItemsList } from './U2HConfigNode'; // Import the getSearchItemsList function
+import { getSearchItemsList } from './U2HConfigNode';
+import Icon from 'react-native-vector-icons/FontAwesome5';
+import Divider from './Divider';
 
 const SearchTab = () => {
   const [searchText, setSearchText] = useState('');
-  const [filteredData, setFilteredData] = useState(getSearchItemsList()); // Use the data from U2HConfigNode
+  const [filteredData, setFilteredData] = useState(getSearchItemsList()); 
 
   const handleSearch = (text) => {
     setSearchText(text);
@@ -16,15 +18,23 @@ const SearchTab = () => {
 
   const renderItem = ({ item }) => {
     return (
-      <TouchableOpacity style={{ padding: 16 }}>
-        <Text style={{ fontSize: 20 }}>{item.name}</Text>
-        <Text style={{ fontSize: 16, color: 'gray' }}>ItemID: {item.id}</Text>
-      </TouchableOpacity>
+        <View style={{marginTop: 12}}>
+        <TouchableOpacity>
+          <View style={styles.listItem}>
+            <Icon style={{marginRight: 16}} name='first-aid' size={24} color='#000000'/>
+            <View>
+              <Text style={{ fontSize: 16 }} numberOfLines={2}>{item.name}</Text>
+              <Text style={{ fontSize: 12, color: 'gray' }}>ItemID: {item.id}</Text>
+            </View>
+          </View>
+        </TouchableOpacity>
+        <Divider />
+        </View>
     );
   };
 
   return (
-    <View>
+    <View style={styles.listView}>
       <TextInput
         style={{ padding: 10, borderColor: 'gray', borderWidth: 1 }}
         placeholder="Search..."
@@ -41,11 +51,32 @@ const SearchTab = () => {
 };
 
 const styles = StyleSheet.create({
+  listView: {
+    backgroundColor: "#ffffff",
+  },
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
+  searchSection: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+  },
+  textInput: {
+    padding: 10,
+    borderColor: 'black',
+    borderWidth: 1,
+  },
+  listItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginHorizontal: 8,
+    flex: 1,
+  }
 });
 
 export default SearchTab;
