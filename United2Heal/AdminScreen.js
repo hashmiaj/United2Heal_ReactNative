@@ -29,18 +29,14 @@ const AdminScreen = ({ onLogin}) => {
     }
   };
 
-  const handleSubmitPress = () => {
-    // Handle Submit button press
-    onLogin();
-    console.log('Submit button pressed');
-  };
   return (
     <View style={styles.container}>
+      <Text style={styles.pageTitle}>United2Heal</Text>
       <Image
             source={require('./img/u2hlogo.png')}
             style={styles.image}
         />
-      <Text style={styles.title}>United2Heal</Text>
+      <Text style={styles.title}>Admin Login</Text>
       <Text style={styles.label}>Username:</Text>
       <TextInput 
         style={styles.input} 
@@ -68,12 +64,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 16,
+    backgroundColor: '#ffffff',
   },
   image: {
-    width: 200,
-    height: 200,
+    width: 150,
+    height: 150,
     resizeMode: 'contain',
-    marginBottom: 40,
+    marginBottom: 20,
   },
   buttonsContainer: {
     flex: 0,
@@ -81,15 +78,20 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     flexDirection: 'row',
   },
-  title: {
+  pageTitle: {
     fontSize: 35,
+    fontWeight: 'bold',
+    marginBottom: 12,
+    textAlign: 'center',
+  },
+  title: {
+    fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 40,
     textAlign: 'center'
   },
   label: {
-    fontSize: 20,
-    marginBottom: 10,
+    fontSize: 16,
   },
   button: {
     width: '75%',

@@ -1,4 +1,4 @@
-import React, { useState, Component } from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, FlatList, TextInput, TouchableOpacity } from 'react-native';
 import { getSearchItemsList } from './U2HConfigNode';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -26,7 +26,7 @@ const SearchTab = () => {
               <Text style={{ fontSize: 16 }} numberOfLines={2}>{item.name}</Text>
               <Text style={{ fontSize: 12, color: 'gray' }}>ItemID: {item.id}</Text>
             </View>
-              <Icon style={{marginLeft: 4 }} name='angle-right' size={22} color='#000000'/>
+            <Icon style={{marginLeft: 4 }} name='angle-right' size={22} color='#000000'/>
           </View>
         </TouchableOpacity>
         <Divider />
