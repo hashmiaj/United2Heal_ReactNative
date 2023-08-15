@@ -9,6 +9,7 @@ const SettingsTab = ({onLogout}) => {
   }
   const navigation = useNavigation();
 
+  
   return (
     <View style={styles.container}>
       <Text> Settings tab</Text>
