@@ -12,7 +12,7 @@ import U2HConfigNode from './U2HConfigNode';
 
 const Tab = createBottomTabNavigator();
 
-const MainTabNavigator = () => {
+const MainTabNavigator = ({onLogout}) => {
   const [isLoading, setIsLoading] = useState(false); 
   const [searchItems, setSearchItems] = useState([]);
 
@@ -80,7 +80,9 @@ const MainTabNavigator = () => {
       <Tab.Screen name="Home" component={HomeTab} />
       <Tab.Screen name="Search" component={SearchTab} />
       <Tab.Screen name="Add Item" component={AddItemTab} />
-      <Tab.Screen name="Settings" component={SettingsTab} />
+      <Tab.Screen name="Settings">
+        {() => <SettingsTab onLogout={onLogout} />}
+      </Tab.Screen>
     </Tab.Navigator>
   );
 };

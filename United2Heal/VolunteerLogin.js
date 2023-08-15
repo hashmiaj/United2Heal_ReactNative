@@ -71,7 +71,6 @@ const VolunteerLogin = ({ onLogin }) => {
     onLogin();
     console.log('Submit button pressed');
   };
-
   const getVolunteerLoginGroups = async () => {
     if (groupNames.length > 0) {
       openBottomSheet();
@@ -92,6 +91,7 @@ const VolunteerLogin = ({ onLogin }) => {
       } finally {}
     }
   };
+
 
   return (
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}> 

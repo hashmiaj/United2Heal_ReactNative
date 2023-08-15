@@ -11,6 +11,7 @@ import WelcomePage from './WelcomePage';
 import AdminScreen from './AdminScreen';
 import VolunteerLogin from './VolunteerLogin';
 
+
 const LoginNavigationStack = createNativeStackNavigator();
 
 function App() {
@@ -19,6 +20,13 @@ function App() {
   const handleLogin = () => {
     setIsLoggedIn(true);
   };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+
+  };
+
+ 
 
   return (
     <PaperProvider>
@@ -33,7 +41,7 @@ function App() {
             {() => <VolunteerLogin onLogin={handleLogin} />}
           </LoginNavigationStack.Screen>
         </LoginNavigationStack.Navigator>) :
-        <MainTabNavigator/>
+        <MainTabNavigator onLogout={handleLogout}/>
       }
       </NavigationContainer>
     </PaperProvider>
