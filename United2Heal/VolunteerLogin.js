@@ -77,6 +77,7 @@ const VolunteerLogin = ({ onLogin }) => {
       openBottomSheet();
     } 
     else {
+      setIsLoading(true);
       try {
         const response = await fetch(`https://0nwtnszk97.execute-api.us-east-1.amazonaws.com/getVolunteerLoginGroups`);
         if (!response.ok) { 
@@ -86,16 +87,22 @@ const VolunteerLogin = ({ onLogin }) => {
         const groups = data.map(item => item.GroupName);
         setGroupNames(groups);
         openBottomSheet();
-
       } catch (error) {
         Alert.alert('Error', error.message);  // Show the actual error message
-      } finally {}
+      } finally {
+        setIsLoading(false); // <-- Ensure loading stops after the fetch
+      }
     }
   };
 
   return (
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}> 
     <View style={styles.container}>
+        {isLoading && 
+          <View style={styles.loadingOverlay}>
+            <ActivityIndicator size="large" color="#0000ff" />
+          </View>
+        }
         <Text style={styles.pageTitle}>United2Heal</Text>
         <Image
             source={require('./img/u2hlogo.png')}
@@ -251,6 +258,17 @@ const styles = StyleSheet.create({
     borderColor: 'black',
     flexDirection: 'column',
     marginVertical: 12
+  },
+  loadingOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.8)', // Semi-transparent white background
+    zIndex: 10  // Ensure the overlay is above all other components
   },
 });
 

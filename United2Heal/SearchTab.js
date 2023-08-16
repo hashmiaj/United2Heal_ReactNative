@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, FlatList, TextInput, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { getSearchItemsList } from './U2HConfigNode';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Divider from './Divider';
@@ -7,6 +8,7 @@ import Divider from './Divider';
 const SearchTab = () => {
   const [searchText, setSearchText] = useState('');
   const [filteredData, setFilteredData] = useState(getSearchItemsList()); 
+  const navigation = useNavigation();
 
   const handleSearch = (text) => {
     setSearchText(text);
@@ -19,7 +21,7 @@ const SearchTab = () => {
   const renderItem = ({ item }) => {
     return (
         <View style={{marginTop: 12}}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => {navigation.navigate('Item Page', {itemName: item.name, itemId: item.id });}}>
           <View style={styles.listItem}>
             <Icon style={{marginRight: 16}} name='first-aid' size={24} color='#000000'/>
             <View style={{width: '90%'}}>

@@ -6,6 +6,7 @@ import HomeTab from './HomeTab';
 import SearchTab from './SearchTab';
 import SettingsTab from './SettingsTab';
 import AddItemTab from './AddItemTab';
+import ItemPage from './ItemPage';
 import Icon from 'react-native-vector-icons/FontAwesome'; // Import your desired icon library
 import Item from './Item';
 import U2HConfigNode from './U2HConfigNode';
@@ -68,7 +69,7 @@ const MainTabNavigator = () => {
               iconName = 'cog';
               color = focused ? "#0096FF" : "#000000";
             } else if (route.name === 'Add Item') {
-              iconName = 'plus';  // This is the line you'll add for the "plus" icon
+              iconName = 'plus'; 
               color = focused ? "#0096FF" : "#000000";
             }
           return <Icon name={iconName} size={size} color={color} />;
@@ -80,6 +81,7 @@ const MainTabNavigator = () => {
       <Tab.Screen name="Home" component={HomeTab} />
       <Tab.Screen name="Search" component={SearchTab} />
       <Tab.Screen name="Add Item" component={AddItemTab} />
+      <Tab.Screen name="Item Page" component={ItemPage} options={{ tabBarButton: () => (null) }}/>
       <Tab.Screen name="Settings" component={SettingsTab} />
     </Tab.Navigator>
   );
