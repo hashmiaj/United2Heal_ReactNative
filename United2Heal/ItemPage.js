@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, Button, TouchableOpacity, Modal, StyleSheet } from 'react-native';
+import React, { useRef, useState, useMemo, useCallback } from 'react';
+import { View, Alert, ActivityIndicator, Text, TextInput, Button, TouchableOpacity, Modal, StyleSheet } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import BottomSheet, { BottomSheetSectionList } from "@gorhom/bottom-sheet";
+import U2HConfigNode from './U2HConfigNode';
+import Divider from './Divider';
 
 const ItemPage = ({ route }) => {
   const navigation = useNavigation();
+  const bottomSheetRef = useRef(null); // Create a ref for the BottomSheet
 
   const { itemName, itemId } = route.params;
 
@@ -13,17 +17,78 @@ const ItemPage = ({ route }) => {
   const [expirationDate, setExpirationDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [noExpiration, setNoExpiration] = useState(false);
-  const [itemBox, setItemBox] = useState('');
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [boxNumbers, setBoxNumbers] = useState('');
+  const [selectedBoxNumber, setSelectedBoxNumber] = useState('');
+  const [isBoxNumberSelected, setIsBoxNumberSelected] = useState(false);
+
+  const snapPoints = useMemo(() => ["40%"], []);
+
+  const handleSheetChange = useCallback((index) => {
+    console.log("handleSheetChange", index);
+  }, []);
+
+  const handleCloseIconPress = () => {
+    closeBottomSheet(); // Close the bottom sheet when the icon is pressed
+  };
+
+  const openBottomSheet = () => {
+    bottomSheetRef.current?.expand();
+  };
+
+  const closeBottomSheet = () => {
+    bottomSheetRef.current?.close();
+  };
+
+  const renderItem = useCallback(
+    ({ item }) => (
+      <View>
+        <TouchableOpacity style={styles.boxNumberItem} onPress={() => {
+          setSelectedBoxNumber(item); // Update selected group name
+          setIsBoxNumberSelected(true);
+          closeBottomSheet(); // Close the bottom sheet
+        }}>
+          <Text style={styles.boxNumberText}>{item}</Text>
+        </TouchableOpacity>
+        <Divider/>
+      </View>
+    ),
+    []
+  );
+
+  const getBoxNumbers = async () => {
+    if (boxNumbers.length > 0) {
+      openBottomSheet();
+    } 
+    else {
+      setIsLoading(true);
+      try {
+        const response = await fetch(`https://l2glmsg7jb.execute-api.us-east-1.amazonaws.com/?GroupName=${U2HConfigNode.getGroupName()}`);
+        if (!response.ok) { 
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        const boxNumbers = data.map(item => item.BoxNumber);
+        setBoxNumbers(boxNumbers);
+        openBottomSheet();
+      } catch (error) {
+        Alert.alert('Error', error.message);  // Show the actual error message
+      } finally {
+        setIsLoading(false); // <-- Ensure loading stops after the fetch
+      }
+    }
+  };
 
   const handleSubmit = async () => {
     // Check if all fields are filled
-    if (!itemName || !itemId || !quantity || (!noExpiration && !expirationDate) || !itemBox) {
+    if (!itemName || !itemId || !quantity || (!noExpiration && !expirationDate) || !isBoxNumberSelected) {
         Alert.alert('Error', 'Please fill in all fields.');
         return;
     }
 
     // Construct the API endpoint with the required parameters
-    const apiUrl = `https://6o9shphxm2.execute-api.us-east-1.amazonaws.com/?ItemID=${itemId}&GroupName=Z&BoxNumber=${itemBox}&ItemName=${itemName}&ItemQuantity=${quantity}&ExpirationDate=${noExpiration ? 'None' : expirationDate.toISOString()}&School=VCU`;
+    const apiUrl = `https://6o9shphxm2.execute-api.us-east-1.amazonaws.com/?ItemID=${itemId}&GroupName=Z&BoxNumber=${selectedBoxNumber}&ItemName=${itemName}&ItemQuantity=${quantity}&ExpirationDate=${noExpiration ? 'None' : expirationDate.toISOString()}&School=VCU`;
 
     try {
         // Make the API call
@@ -50,6 +115,11 @@ const ItemPage = ({ route }) => {
 
   return (
     <View style={styles.container}>
+      {isLoading && 
+        <View style={styles.loadingOverlay}>
+          <ActivityIndicator size="large" color="#0000ff" />
+        </View>
+      }
       <Text style={styles.headerText}>Item Name:</Text>
       <Text>{itemName}</Text>
 
@@ -85,13 +155,11 @@ const ItemPage = ({ route }) => {
       </View>
 
       <Text style={styles.headerText}>Item Box:</Text>
-      <Text style={styles.descriptionText}>Enter details about the item's box.</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Enter Item Box Details"
-        value={itemBox}
-        onChangeText={setItemBox}
-      />
+      <Text style={styles.descriptionText}>Select the box you're putting the item in.</Text>
+      <TouchableOpacity style={styles.dropdownContainer} onPress={getBoxNumbers}>
+        <Text style={styles.dropdownText}>{isBoxNumberSelected ? selectedBoxNumber : 'Select Box Number'}</Text>
+        <Icon style={{ position: 'absolute', right: 12}} name='caret-down' size={22} color='#000000'/>
+      </TouchableOpacity>
 
       <Button title="Submit" onPress={handleSubmit} />
 
@@ -109,13 +177,33 @@ const ItemPage = ({ route }) => {
           <Button title="Done" onPress={() => setShowDatePicker(false)} />
         </View>
       </Modal>
+      <BottomSheet
+        ref={bottomSheetRef}
+        index={-1}
+        snapPoints={snapPoints}
+        onChange={handleSheetChange}
+      >
+        <View style={styles.bottomSheetTitleContainer}>
+          <Text style={styles.dropdownText}>Select Box Number</Text>
+          <TouchableOpacity style={{ position: 'absolute', right: 12}} onPress={handleCloseIconPress}>
+            <Icon  name="times" size={18} color="black" />
+          </TouchableOpacity>
+        </View>
+        <BottomSheetSectionList
+          sections={[{ title: 'Select Box Number', data: boxNumbers }]}
+          keyExtractor={(item) => item}
+          renderItem={renderItem}
+          contentContainerStyle={styles.contentContainer}
+        />
+      </BottomSheet>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20
+    padding: 20,
+    flex: 1
   },
   headerText: {
     fontWeight: 'bold',
@@ -173,6 +261,41 @@ const styles = StyleSheet.create({
   },
   dropdownIcon: {
     marginLeft: 10,
+  },
+  boxNumberItem: {
+    alignItems: 'center',
+    marginTop: 4
+  },
+  bottomSheetTitleContainer: {
+    flexDirection: 'row',
+    width: '100%',
+    height: 40,
+    marginTop: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'white'
+  },
+  boxNumberText: {
+    marginTop: 8,
+    fontSize: 18,
+    color: 'black',
+  },
+  dropdownText: {
+    fontSize: 15,
+    textAlign: 'center',
+    fontWeight: 'bold'
+  },
+  loadingOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.8)', // Semi-transparent white background
+    zIndex: 10  // Ensure the overlay is above all other components
   },
 });
 

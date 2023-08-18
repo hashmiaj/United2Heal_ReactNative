@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, useMemo, useCallback } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { View, Text, Image, StyleSheet, TouchableOpacity, ActivityIndicator, Alert, TextInput, KeyboardAvoidingView } from 'react-native';
-import BottomSheet, { BottomSheetSectionList, BottomSheetFooter } from "@gorhom/bottom-sheet";
+import BottomSheet, { BottomSheetSectionList } from "@gorhom/bottom-sheet";
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import U2HConfigNode from './U2HConfigNode';
 import Divider from './Divider';
