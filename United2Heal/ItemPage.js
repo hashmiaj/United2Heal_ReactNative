@@ -16,12 +16,13 @@ const ItemPage = ({ route }) => {
   const [quantity, setQuantity] = useState('');
   const [expirationDate, setExpirationDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [noExpiration, setNoExpiration] = useState(false);
+  const [noExpiration, setNoExpiration] = useState(true);
 
   const [isLoading, setIsLoading] = useState(false);
   const [boxNumbers, setBoxNumbers] = useState('');
   const [selectedBoxNumber, setSelectedBoxNumber] = useState('');
   const [isBoxNumberSelected, setIsBoxNumberSelected] = useState(false);
+  const GroupName= U2HConfigNode.getGroupName();
 
   const snapPoints = useMemo(() => ["40%"], []);
 
@@ -88,7 +89,7 @@ const ItemPage = ({ route }) => {
     }
 
     // Construct the API endpoint with the required parameters
-    const apiUrl = `https://6o9shphxm2.execute-api.us-east-1.amazonaws.com/?ItemID=${itemId}&GroupName=Z&BoxNumber=${selectedBoxNumber}&ItemName=${itemName}&ItemQuantity=${quantity}&ExpirationDate=${noExpiration ? 'None' : expirationDate.toISOString()}&School=VCU`;
+    const apiUrl = `https://6o9shphxm2.execute-api.us-east-1.amazonaws.com/?ItemID=${itemId}&GroupName=${GroupName}&BoxNumber=${selectedBoxNumber}&ItemName=${itemName}&ItemQuantity=${quantity}&ExpirationDate=${noExpiration ? 'None' : expirationDate.toISOString()}&School=VCU`;
 
     try {
         // Make the API call
@@ -99,10 +100,8 @@ const ItemPage = ({ route }) => {
         // Check if the API call was successful
         if (response.ok) {
             const responseData = await response.json();
-
-            // Handle the response data as needed. 
-            // For now, just navigating back to the home screen.
-            navigation.navigate('Home');
+            Alert.alert('Success', `Successfully submitted ${itemName} into Box ${GroupName} ${selectedBoxNumber}`, [{text: 'OK', onPress: () => navigation.navigate('Home')}]);
+            setIsLoading(false);
         } else {
             // If the server returns a response outside the range 200-299, it will be considered an error
             Alert.alert('Error', 'Failed to submit the item. Please try again.');
