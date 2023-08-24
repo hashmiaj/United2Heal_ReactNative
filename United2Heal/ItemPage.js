@@ -1,4 +1,4 @@
-import React, { useRef, useState, useMemo, useCallback } from 'react';
+import React, { useRef, useState, useMemo, useCallback, useEffect } from 'react';
 import { View, Alert, ActivityIndicator, Text, TextInput, Button, TouchableOpacity, Modal, StyleSheet } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import { useNavigation } from '@react-navigation/native';
@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import BottomSheet, { BottomSheetSectionList } from "@gorhom/bottom-sheet";
 import U2HConfigNode from './U2HConfigNode';
 import Divider from './Divider';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ItemPage = ({ route }) => {
   const navigation = useNavigation();
@@ -22,7 +23,17 @@ const ItemPage = ({ route }) => {
   const [boxNumbers, setBoxNumbers] = useState('');
   const [selectedBoxNumber, setSelectedBoxNumber] = useState('');
   const [isBoxNumberSelected, setIsBoxNumberSelected] = useState(false);
-  const GroupName= U2HConfigNode.getGroupName();
+  const GroupName = U2HConfigNode.getGroupName();
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      setQuantity('');
+      setNoExpiration(true);
+      setIsBoxNumberSelected(false);
+    });
+    // Return the cleanup function
+    return unsubscribe;
+}, [navigation]);
 
   const snapPoints = useMemo(() => ["40%"], []);
 
@@ -87,29 +98,58 @@ const ItemPage = ({ route }) => {
         Alert.alert('Error', 'Please fill in all fields.');
         return;
     }
+    // Construct the item details string for the confirmation alert
+    const itemDetails = `
+        Item Name: ${itemName}
+
+        Item Quantity: ${quantity}
+
+        Expiration Date: ${noExpiration ? 'None' : expirationDate.toDateString()}
+
+        Item Box: ${selectedBoxNumber}
+    `;
 
     // Construct the API endpoint with the required parameters
     const apiUrl = `https://6o9shphxm2.execute-api.us-east-1.amazonaws.com/?ItemID=${itemId}&GroupName=${GroupName}&BoxNumber=${selectedBoxNumber}&ItemName=${itemName}&ItemQuantity=${quantity}&ExpirationDate=${noExpiration ? 'None' : expirationDate.toISOString()}&School=VCU`;
 
-    try {
-        // Make the API call
-        const response = await fetch(apiUrl, {
-            method: 'POST'
-        });
+    // Show a confirmation alert before proceeding
+    Alert.alert(
+        'Confirm Submission',
+        `Are you sure you want to submit the following item?\n\n${itemDetails}`,
+        [
+            { text: 'Cancel', style: 'cancel' },
+            {
+                text: 'OK',
+                onPress: async () => {
+                    try {
+                        setIsLoading(true);
 
-        // Check if the API call was successful
-        if (response.ok) {
-            const responseData = await response.json();
-            Alert.alert('Success', `Successfully submitted ${itemName} into Box ${GroupName} ${selectedBoxNumber}`, [{text: 'OK', onPress: () => navigation.navigate('Home')}]);
-            setIsLoading(false);
-        } else {
-            // If the server returns a response outside the range 200-299, it will be considered an error
-            Alert.alert('Error', 'Failed to submit the item. Please try again.');
-        }
-    } catch (error) {
-        // Handle any other errors (e.g., network issues)
-        Alert.alert('Error', 'An error occurred. Please check your connection and try again.');
-    }
+                        // Your existing code to make the API call
+                        const response = await fetch(apiUrl, {
+                            method: 'POST'
+                        });
+
+                        // Handle response and errors as before
+                        if (response.ok) {
+                            // Success alert
+                            Alert.alert(
+                                'Success',
+                                `Successfully submitted ${itemName} into Box ${GroupName} ${selectedBoxNumber}`,
+                                [{ text: 'OK', onPress: () => navigation.navigate('Home') }]
+                            );
+                            setIsLoading(false);
+                        } else {
+                            Alert.alert('Error', 'Failed to submit the item. Please try again.');
+                        }
+                    } catch (error) {
+                        Alert.alert('Error', 'An error occurred. Please check your connection and try again.');
+                    } finally {
+                        setIsLoading(false);
+                    }
+                }
+            }
+        ]
+    );
 };
 
   return (
@@ -150,7 +190,7 @@ const ItemPage = ({ route }) => {
             setExpirationDate(new Date());
           }
         }} />
-        <Text>No Expiration</Text>
+        <Text style={{marginLeft: 10}} >No Expiration</Text>
       </View>
 
       <Text style={styles.headerText}>Item Box:</Text>
@@ -160,7 +200,9 @@ const ItemPage = ({ route }) => {
         <Icon style={{ position: 'absolute', right: 12}} name='caret-down' size={22} color='#000000'/>
       </TouchableOpacity>
 
-      <Button title="Submit" onPress={handleSubmit} />
+      <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+          <Text style={styles.buttonText}>Submit</Text>
+      </TouchableOpacity>
 
       <Modal
         visible={showDatePicker}
@@ -202,12 +244,13 @@ const ItemPage = ({ route }) => {
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    flex: 1
+    flex: 1,
+    backgroundColor: "#ffffff"
   },
   headerText: {
     fontWeight: 'bold',
     fontSize: 18,  
-    marginTop: 10,
+    marginTop: 20,
   },
   descriptionText: {
     fontStyle: 'italic',
@@ -222,8 +265,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderWidth: 1,
+    borderRadius: 5,
+  },
+  dropdownContainer: {
+    flexDirection: 'row',
     borderColor: '#ccc',
     borderRadius: 5,
+    borderWidth: 1,
+    height: 40,
+    marginTop: 20,
+    marginBottom: 40,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   checkboxContainer: {
     flexDirection: 'row',
@@ -284,6 +337,20 @@ const styles = StyleSheet.create({
     fontSize: 15,
     textAlign: 'center',
     fontWeight: 'bold'
+  },
+  button: {
+    height: 50,
+    borderRadius: 25,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 16,
+    marginHorizontal: 8,
+    backgroundColor: '#4285F4',
+  },
+  buttonText: {
+    color: '#ffffff',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   loadingOverlay: {
     position: 'absolute',

@@ -45,14 +45,10 @@ const SearchTab = () => {
       Alert.alert('Error', error.message); // Show the actual error message
     } finally {
       setIsLoading(false); // Set loading to false when the API call is finished
+      setFilteredData(getSearchItemsList());
+      setSearchText('');
     }
   };
-
-  useEffect(() => {
-    if (searchItems.length == 0) {
-      getSearchItems();
-    }
-  }, []);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
