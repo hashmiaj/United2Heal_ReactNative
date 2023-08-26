@@ -8,6 +8,13 @@ import U2HConfigNode from './U2HConfigNode';
 import Divider from './Divider';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+function formatDate(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
 const ItemPage = ({ route }) => {
   const navigation = useNavigation();
   const bottomSheetRef = useRef(null); // Create a ref for the BottomSheet
@@ -25,15 +32,42 @@ const ItemPage = ({ route }) => {
   const [isBoxNumberSelected, setIsBoxNumberSelected] = useState(false);
   const GroupName = U2HConfigNode.getGroupName();
 
+  const [volunteerItemCount, setVolunteerItemCount] = useState(0);
+  const todayDate = formatDate(new Date());
+
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
+      setIsLoading(true);
       setQuantity('');
       setNoExpiration(true);
       setIsBoxNumberSelected(false);
+      loadItemCount(todayDate);
     });
     // Return the cleanup function
     return unsubscribe;
 }, [navigation]);
+
+const loadItemCount = async (date) => {
+  try {
+    const count = await AsyncStorage.getItem(date);
+    if (count !== null) {
+      setVolunteerItemCount(parseInt(count));
+    }
+    setIsLoading(false);
+  } catch (error) {
+    console.error('Error loading item count:', error);
+  }
+};
+
+const incrementCount = async () => {
+  try {
+    const newCount = volunteerItemCount + 1;
+    setVolunteerItemCount(newCount);
+    await AsyncStorage.setItem(todayDate, newCount.toString());
+  } catch (error) {
+    console.error('Error saving item count:', error);
+  }
+};
 
   const snapPoints = useMemo(() => ["40%"], []);
 
@@ -137,6 +171,7 @@ const ItemPage = ({ route }) => {
                                 `Successfully submitted ${itemName} into Box ${GroupName} ${selectedBoxNumber}`,
                                 [{ text: 'OK', onPress: () => navigation.navigate('Home') }]
                             );
+                            incrementCount();
                             setIsLoading(false);
                         } else {
                             Alert.alert('Error', 'Failed to submit the item. Please try again.');
