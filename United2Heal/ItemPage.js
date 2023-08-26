@@ -260,6 +260,7 @@ const styles = StyleSheet.create({
   },
   input: {
     backgroundColor: 'white',
+    borderColor: '#ccc',
     marginTop: 5,
     marginBottom: 10,
     paddingHorizontal: 10,

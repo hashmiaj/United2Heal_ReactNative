@@ -1,36 +1,66 @@
 // AdminScreen.js
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { View, Text, TextInput, Button, StyleSheet, Alert, Image, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, ActivityIndicator, StyleSheet, Alert, Image, TouchableOpacity } from 'react-native';
+import U2HConfigNode from './U2HConfigNode';
 
 const AdminScreen = ({ onLogin}) => {
   const navigation = useNavigation();
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [attemptCount, setAttemptCount] = useState(0);
+  const [correctPassword, setCorrectPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  const correctUsername = 'admin';
-  const correctPassword = 'password123';
+  const getCorrectPassword = async () => {
+    setIsLoading(true); // Set loading to true when we start the API call
+    try {
+      const response = await fetch(
+        'https://lsmtrmi3d9.execute-api.us-east-1.amazonaws.com/getAdminPassword'
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      const password = data.map(item => item.Password);
+      setCorrectPassword(password[0]);
+
+    } catch (error) {
+      console.log(error.message);
+      Alert.alert('Error', error.message); // Show the actual error message
+    } finally {
+      setIsLoading(false); // Set loading to false when the API call is finished
+    }
+  };
   
   const handleLogin = () => {
-    if (username !== correctUsername || password !== correctPassword) {
-      setAttemptCount(attemptCount + 1);
-      if (attemptCount >= 2) {
-        Alert.alert('Error', 'You have entered incorrect credentials 3 times. You will be redirected to the welcome page.');
-        navigation.navigate('Welcome');
-      } else {
-        Alert.alert('Error', 'Incorrect username or password. Please try again.');
-      }
+    if (password !== correctPassword) {
+      Alert.alert('Error', 'Incorrect password. Please try again.');
     } else {
+      U2HConfigNode.setVolunteerName(username);
       onLogin();
       console.log('Submit button pressed');
     }
   };
 
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+        // Logic to execute when the screen is focused
+        getCorrectPassword();
+    });
+
+    // Return the cleanup function
+    return unsubscribe;
+}, [navigation]);
+
   return (
     <View style={styles.container}>
+      {isLoading && 
+        <View style={styles.loadingOverlay}>
+          <ActivityIndicator size="large" color="#0000ff" />
+        </View>
+      }
       <Text style={styles.pageTitle}>United2Heal</Text>
       <Image
             source={require('./img/u2hlogo.png')}
@@ -113,8 +143,19 @@ const styles = StyleSheet.create({
     width: '85%',
     borderColor: 'gray',
     borderWidth: 1,
-    marginBottom: 20,
+    marginBottom: 40,
     padding: 10,
+  },
+  loadingOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.8)', // Semi-transparent white background
+    zIndex: 10  // Ensure the overlay is above all other components
   },
 });
 
