@@ -13,6 +13,7 @@ const SettingsTab = () => {
       <TouchableOpacity style={styles.button} onPress={handleLogout}>
           <Text style={styles.buttonText}>Logout</Text>
       </TouchableOpacity>
+      <Text style={styles.settings_text}>© 2023 United2Heal. All rights reserved.</Text>
     </View>
   );
 };
@@ -38,6 +39,12 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  settings_text:{
+    position: 'absolute',
+    fontSize: 16,
+    fontWeight: 'bold',
+    bottom: 60
   },
 });
 

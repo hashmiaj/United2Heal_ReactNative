@@ -134,13 +134,13 @@ const incrementCount = async () => {
     }
     // Construct the item details string for the confirmation alert
     const itemDetails = `
-        Item Name: ${itemName}
+Item Name: ${itemName}
 
-        Item Quantity: ${quantity}
+Item Quantity: ${quantity}
 
-        Expiration Date: ${noExpiration ? 'None' : expirationDate.toDateString()}
+Expiration Date: ${noExpiration ? 'None' : expirationDate.toDateString()}
 
-        Item Box: ${selectedBoxNumber}
+Item Box: ${selectedBoxNumber}
     `;
 
     // Construct the API endpoint with the required parameters
