@@ -1,5 +1,5 @@
 import React, { useRef, useState, useMemo, useCallback, useEffect } from 'react';
-import { View, Alert, ActivityIndicator, Text, TextInput, Button, TouchableOpacity, Modal, StyleSheet } from 'react-native';
+import { View, Alert, ActivityIndicator, Text, TextInput, Button, TouchableOpacity, Modal, StyleSheet, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -35,6 +35,34 @@ const ItemPage = ({ route }) => {
   const [volunteerItemCount, setVolunteerItemCount] = useState(0);
   const todayDate = formatDate(new Date());
 
+  const [appStatus, setAppStatus] = useState(0);
+
+  const getAppStatus = async () => {
+    setIsLoading(true); // Set loading to true when we start the API call
+    try {
+      const response = await fetch(
+        'https://4em2zegc7d.execute-api.us-east-1.amazonaws.com/getAppStatus'
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      const currentAppStatus = data.map(item => item.AppStatus);
+      setAppStatus(currentAppStatus);
+    } catch (error) {
+      console.log(error.message);
+      Alert.alert('Error', error.message); // Show the actual error message
+    } finally {
+      setIsLoading(false); // Set loading to false when the API call is finished
+    }
+  };
+
+  const DismissKeyboard = ({ children }) => (
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      {children}
+    </TouchableWithoutFeedback>
+  );
+
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       setIsLoading(true);
@@ -42,6 +70,7 @@ const ItemPage = ({ route }) => {
       setNoExpiration(true);
       setIsBoxNumberSelected(false);
       loadItemCount(todayDate);
+      getAppStatus();
     });
     // Return the cleanup function
     return unsubscribe;
@@ -127,6 +156,10 @@ const incrementCount = async () => {
   };
 
   const handleSubmit = async () => {
+    if (appStatus == 0) {
+      Alert.alert('App not active!', 'A Unted2Heal Admin has not set the app to active yet. Talk to an admin for more info!');
+      return;
+    }
     // Check if all fields are filled
     if (!itemName || !itemId || !quantity || (!noExpiration && !expirationDate) || !isBoxNumberSelected) {
         Alert.alert('Error', 'Please fill in all fields.');
@@ -188,6 +221,8 @@ Item Box: ${selectedBoxNumber}
 };
 
   return (
+    <>
+    <DismissKeyboard>
     <View style={styles.container}>
       {isLoading && 
         <View style={styles.loadingOverlay}>
@@ -253,7 +288,9 @@ Item Box: ${selectedBoxNumber}
           <Button title="Done" onPress={() => setShowDatePicker(false)} />
         </View>
       </Modal>
-      <BottomSheet
+    </View>
+    </DismissKeyboard>
+    <BottomSheet
         ref={bottomSheetRef}
         index={-1}
         snapPoints={snapPoints}
@@ -272,7 +309,7 @@ Item Box: ${selectedBoxNumber}
           contentContainerStyle={styles.contentContainer}
         />
       </BottomSheet>
-    </View>
+    </>
   );
 };
 

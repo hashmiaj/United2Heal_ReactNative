@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState, useMemo, useCallback } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { View, Text, Image, StyleSheet, TouchableOpacity, ActivityIndicator, Alert, TextInput, KeyboardAvoidingView } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, ActivityIndicator, Alert, TextInput, KeyboardAvoidingView, Keyboard } from 'react-native';
 import BottomSheet, { BottomSheetSectionList } from "@gorhom/bottom-sheet";
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import U2HConfigNode from './U2HConfigNode';
 import Divider from './Divider';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const VolunteerLogin = ({ onLogin }) => {
   const navigation = useNavigation();
@@ -14,7 +15,35 @@ const VolunteerLogin = ({ onLogin }) => {
   const [selectedGroupName, setSelectedGroupName] = useState('A');
   const [isGroupNameSelected, setisGroupNameSelected] = useState(false);
   const [groupNames, setGroupNames] = useState('');
+  const [appStatus, setAppStatus] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+
+  const getAppStatus = async () => {
+    setIsLoading(true); // Set loading to true when we start the API call
+    try {
+      const response = await fetch(
+        'https://4em2zegc7d.execute-api.us-east-1.amazonaws.com/getAppStatus'
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      const currentAppStatus = data.map(item => item.AppStatus);
+      setAppStatus(currentAppStatus);
+    } catch (error) {
+      console.log(error.message);
+      Alert.alert('Error', error.message); // Show the actual error message
+    } finally {
+      setIsLoading(false); // Set loading to false when the API call is finished
+    }
+  };
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+        getAppStatus();
+    });
+    return unsubscribe;
+}, [navigation]);
 
   const snapPoints = useMemo(() => ["40%"], []);
 
@@ -58,6 +87,10 @@ const VolunteerLogin = ({ onLogin }) => {
   };
 
   const handleSubmitPress = () => {
+    if (appStatus == 0) {
+      Alert.alert('App not active!', 'A Unted2Heal Admin has not set the app to active yet. Talk to an admin for more info!');
+      return;
+    }
     // Handle Submit button press
     if (volunteerName.length <= 1) {
       Alert.alert('Invalid Name', 'Please enter a valid name.');
@@ -72,6 +105,7 @@ const VolunteerLogin = ({ onLogin }) => {
     console.log('Submit button pressed');
   };
   const getVolunteerLoginGroups = async () => {
+    Keyboard.dismiss();
     if (groupNames.length > 0) {
       openBottomSheet();
     } 
@@ -96,7 +130,7 @@ const VolunteerLogin = ({ onLogin }) => {
 
 
   return (
-    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}> 
+    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
     <View style={styles.container}>
         {isLoading && 
           <View style={styles.loadingOverlay}>

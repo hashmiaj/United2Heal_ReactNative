@@ -1,9 +1,15 @@
 import React, { useState } from 'react';
-import { Button, View, Text, StyleSheet, TextInput, Alert, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { Button, View, Text, StyleSheet, TextInput, Alert, ActivityIndicator, TouchableOpacity, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 
 const AddItemTab = () => {
+  const DismissKeyboard = ({ children }) => (
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      {children}
+    </TouchableWithoutFeedback>
+  );
+
   const [itemName, setItemName] = useState('');
   const [isLoading, setIsLoading] = useState(false);  // New state variable for loading
   const icon = <Icon name={'comments'} solid />;
@@ -29,6 +35,7 @@ const AddItemTab = () => {
   };
 
   return (
+    <DismissKeyboard>
     <View style={styles.container}>
       {isLoading ? (  // If loading, display the loading screen
         <ActivityIndicator size="large" color="#0000ff" />
@@ -46,6 +53,7 @@ const AddItemTab = () => {
         </>
       )}
     </View>
+    </DismissKeyboard>
   );
 };
 const styles = StyleSheet.create({

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { View, Text, TextInput, ActivityIndicator, StyleSheet, Alert, Image, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, ActivityIndicator, StyleSheet, Alert, Image, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
 import U2HConfigNode from './U2HConfigNode';
 
 const AdminScreen = ({ onLogin}) => {
@@ -55,6 +55,7 @@ const AdminScreen = ({ onLogin}) => {
 }, [navigation]);
 
   return (
+    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
     <View style={styles.container}>
       {isLoading && 
         <View style={styles.loadingOverlay}>
@@ -84,13 +85,13 @@ const AdminScreen = ({ onLogin}) => {
                 <Text style={styles.buttonText}>Submit</Text>
         </TouchableOpacity>
     </View>
+    </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     height: '100%',
-    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 16,
