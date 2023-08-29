@@ -1,5 +1,5 @@
 import React, { useRef, useState, useMemo, useCallback, useEffect } from 'react';
-import { View, Alert, ActivityIndicator, Text, TextInput, Button, TouchableOpacity, Modal, StyleSheet, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { View, Alert, ActivityIndicator, Text, TextInput, Button, TouchableOpacity, Modal, StyleSheet, InputAccessoryView, Keyboard } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -56,12 +56,6 @@ const ItemPage = ({ route }) => {
       setIsLoading(false); // Set loading to false when the API call is finished
     }
   };
-
-  const DismissKeyboard = ({ children }) => (
-    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      {children}
-    </TouchableWithoutFeedback>
-  );
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -222,7 +216,6 @@ Item Box: ${selectedBoxNumber}
 
   return (
     <>
-    <DismissKeyboard>
     <View style={styles.container}>
       {isLoading && 
         <View style={styles.loadingOverlay}>
@@ -243,8 +236,8 @@ Item Box: ${selectedBoxNumber}
         value={quantity}
         onChangeText={setQuantity}
         keyboardType="numeric"
+        inputAccessoryViewID="Done"
       />
-
         <Text style={styles.headerText}>Expiration Date:</Text>
       <Text style={styles.descriptionText}>Select the expiration date of the item.</Text>
       <TouchableOpacity style={styles.dateBox} onPress={() => setShowDatePicker(true)}>
@@ -289,7 +282,14 @@ Item Box: ${selectedBoxNumber}
         </View>
       </Modal>
     </View>
-    </DismissKeyboard>
+    <InputAccessoryView nativeID="Done">
+      <View style={styles.accessory}>
+        <Button
+          onPress={() => Keyboard.dismiss()}
+          title="Done"
+        />
+      </View>
+    </InputAccessoryView>
     <BottomSheet
         ref={bottomSheetRef}
         index={-1}
@@ -424,6 +424,15 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  accessory: {
+    width: '100%',
+    height: 48,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    backgroundColor: '#F8F8F8',
+    paddingHorizontal: 8
   },
   loadingOverlay: {
     position: 'absolute',
