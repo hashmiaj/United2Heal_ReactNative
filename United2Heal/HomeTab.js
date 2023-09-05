@@ -91,23 +91,28 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
     color: '#0000FF', 
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    color: 'blue',
   },
   description: {
     fontSize: 20, 
     marginTop: 10,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    color: 'black',
   },
   summary: {
     fontSize: 13,
     textAlign: 'justify',
+    color: 'black',
   },
   submittedItems: {
     fontSize: 28,
+    color: 'black',
   },
   itemCount: {
     fontSize: 40,
     marginTop: 10,
+    color: 'black',
   },
   loadingOverlay: {
     position: 'absolute',

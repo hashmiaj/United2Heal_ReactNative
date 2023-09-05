@@ -266,12 +266,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 16,
     textAlign: 'center',
+    color: 'black',
   },
   paragraph: {
     fontSize: 18,
     fontWeight: '300',
     marginBottom: 10,
     textAlign: 'center',
+    color: 'black',
   },
   button: {
     width: '100%',
@@ -310,7 +312,8 @@ const styles = StyleSheet.create({
   dropdownText: {
     fontSize: 15,
     textAlign: 'center',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    color: 'black',
   },
   groupItem: {
     alignItems: 'center',

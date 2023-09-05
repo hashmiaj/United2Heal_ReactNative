@@ -142,19 +142,23 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 20, 
     marginTop: 20,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    color: 'black',
   },
   submittedItems: {
     fontSize: 28,
+    color:'black',
   },
   summary: {
     fontSize: 16,
     textAlign: 'center',
-    marginTop: 8
+    marginTop: 8,
+    color: 'black',
   },
   itemCount: {
     fontSize: 60,
     marginTop: 20,
+    color: 'black',
   },
   loadingOverlay: {
     position: 'absolute',

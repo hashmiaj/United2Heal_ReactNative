@@ -255,15 +255,19 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 40,
     textAlign: 'center',
+    color: 'black',
   },
   description: {
     fontSize: 15,
-    textAlign: 'center'
+    fontWeight: 'bold',
+    textAlign: 'center',
+    color: 'black',
   },
   dropdownText: {
     fontSize: 15,
     textAlign: 'center',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    color: 'black',
   },
   button: {
     width: '50%',
@@ -291,7 +295,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'black',
     flexDirection: 'column',
-    marginVertical: 12
+    marginVertical: 12,
+    color: 'black',
+    fontWeight: 'bold',
   },
   loadingOverlay: {
     position: 'absolute',

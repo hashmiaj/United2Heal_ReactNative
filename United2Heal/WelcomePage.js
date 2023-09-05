@@ -65,11 +65,13 @@ const styles = StyleSheet.create({
     fontSize: 35,
     fontWeight: 'bold',
     marginBottom: 40,
-    textAlign: 'center'
+    textAlign: 'center',
+    color: 'black',
   },
   description: {
     fontSize: 15,
-    textAlign: 'center'
+    textAlign: 'center',
+    color: 'black',
   },
   button: {
     width: '100%',

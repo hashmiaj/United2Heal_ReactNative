@@ -358,12 +358,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 16,
     textAlign: 'center',
+    color: 'black',
   },
   paragraph: {
     fontSize: 18,
     fontWeight: '300',
     marginBottom: 10,
     textAlign: 'center',
+    color: 'black',
   },
   textInput: {
     backgroundColor: 'white',
@@ -374,6 +376,7 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     borderWidth: 1,
     borderRadius: 5,
+    color: 'black',
   },
   input: {
     height: 50,
@@ -381,6 +384,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 16,
     paddingHorizontal: 8,
+    color: 'black',
   },
   button: {
     width: '45%',
@@ -433,7 +437,8 @@ const styles = StyleSheet.create({
   dropdownText: {
     fontSize: 15,
     textAlign: 'center',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    color: 'black',
   },
   groupItem: {
     alignItems: 'center',

@@ -67,7 +67,7 @@ const SearchTab = () => {
           <View style={styles.listItem}>
             <Icon style={{marginRight: 16}} name='first-aid' size={24} color='#000000'/>
             <View style={{width: '90%'}}>
-              <Text style={{ fontSize: 16 }} numberOfLines={2}>{item.name}</Text>
+              <Text style={{ fontSize: 16, color: 'black' }} numberOfLines={2}>{item.name}</Text>
               <Text style={{ fontSize: 12, color: 'gray' }}>ItemID: {item.id}</Text>
             </View>
             <Icon style={{marginLeft: 4 }} name='angle-right' size={22} color='#000000'/>
@@ -86,7 +86,7 @@ const SearchTab = () => {
       ) :
     <View style={styles.listView}>
       <TextInput
-        style={{ padding: 10, borderColor: 'gray', borderWidth: 1 }}
+        style={{ padding: 10, borderColor: 'gray', borderWidth: 1, color: 'black'}}
         placeholder="Search..."
         value={searchText}
         onChangeText={handleSearch}

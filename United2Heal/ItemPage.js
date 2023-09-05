@@ -223,10 +223,10 @@ Item Box: ${selectedBoxNumber}
         </View>
       }
       <Text style={styles.headerText}>Item Name:</Text>
-      <Text>{itemName}</Text>
+      <Text style={styles.descriptionText}>{itemName}</Text>
 
       <Text style={styles.headerText}>Item ID:</Text>
-      <Text>{itemId}</Text>
+      <Text style={styles.descriptionText}>{itemId}</Text>
 
       <Text style={styles.headerText}>Item Quantity:</Text>
       <Text style={styles.descriptionText}>Enter the quantity of the item.</Text>
@@ -323,12 +323,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 18,  
     marginTop: 20,
+    color: 'black',
   },
   descriptionText: {
     fontStyle: 'italic',
     fontSize: 12,
     color: '#777',
-    marginBottom: 5
+    marginBottom: 5,
+    color: 'black',
   },
   input: {
     backgroundColor: 'white',
@@ -339,6 +341,7 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     borderWidth: 1,
     borderRadius: 5,
+    color: 'black',
   },
   dropdownContainer: {
     flexDirection: 'row',
@@ -409,7 +412,8 @@ const styles = StyleSheet.create({
   dropdownText: {
     fontSize: 15,
     textAlign: 'center',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    color: 'black',
   },
   button: {
     height: 50,

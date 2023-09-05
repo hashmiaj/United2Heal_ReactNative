@@ -114,15 +114,19 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 12,
     textAlign: 'center',
+    color: 'black',
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 40,
-    textAlign: 'center'
+    textAlign: 'center',
+    color: 'black',
   },
   label: {
     fontSize: 16,
+    fontWeight: 'bold',
+    color: 'black',
   },
   button: {
     width: '75%',
@@ -146,6 +150,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 40,
     padding: 10,
+    color: 'black',
+    fontWeight: 'bold',
   },
   loadingOverlay: {
     position: 'absolute',

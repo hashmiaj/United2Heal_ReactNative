@@ -61,12 +61,14 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     marginBottom: 16,
     textAlign: 'center',
+    color: 'black',
   },
   paragraph: {
     fontSize: 18,
     fontWeight: '300',
     marginBottom: 48,
     textAlign: 'center',
+    color: 'black',
   },
   input: {
     height: 50,
@@ -74,6 +76,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 16,
     paddingHorizontal: 8,
+    color: 'black',
   },
   button: {
     width: '100%',
