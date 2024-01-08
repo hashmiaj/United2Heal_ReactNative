@@ -6,6 +6,7 @@ import SettingsTab from './SettingsTab';
 import Icon from 'react-native-vector-icons/FontAwesome5'; // Import your desired icon library
 import AdminOpenBoxTab from './AdminOpenBoxTab';
 import AdminCloseBoxTab from './AdminCloseBoxTab';
+import AdminExportBoxTab from './AdminExportBoxTab';
 
 const Tab = createBottomTabNavigator();
 
@@ -24,6 +25,10 @@ const AdminTabNavigator = () => {
           } else if (route.name === 'Close Box') {
             iconName = 'box';
             color = focused ? "#0096FF" : "#000000";
+            //export tab here ---------->
+          }  else if (route.name === 'Export Box') {
+            iconName = 'share';
+            color = focused? "#0096FF" : "#000000";
           } else if (route.name === 'Settings') {
             iconName = 'cog';
             color = focused ? "#0096FF" : "#000000";
@@ -36,6 +41,7 @@ const AdminTabNavigator = () => {
       <Tab.Screen name="Home" component={AdminHomeTab} />
       <Tab.Screen name="Open Box" component={AdminOpenBoxTab} />
       <Tab.Screen name="Close Box" component={AdminCloseBoxTab} />
+      <Tab.Screen name="Export Box" component={AdminExportBoxTab} />
       <Tab.Screen name="Settings" component={SettingsTab} />
     </Tab.Navigator>
   );
