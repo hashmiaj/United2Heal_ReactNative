@@ -115,42 +115,39 @@ const AdminExportBoxTab = () => {
   const getBoxNumbers = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch(`https://9cqehg42f1.execute-api.us-east-1.amazonaws.com/?GroupName=${selectedGroupName}`);
+      const response = await fetch(`https://ktmkdjyf67.execute-api.us-east-1.amazonaws.com/getAllBoxes?groupName=${selectedGroupName}`);
+  
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
+  
       const data = await response.json();
       const boxes = data.map(item => item.BoxNumber);
       setBoxNumbers(boxes);
       openBottomSheet(boxNumbersBottomSheetRef);
     } catch (error) {
-      Alert.alert('Error', error.message);  // Show the actual error message
+      Alert.alert('Error', error.message);
     } finally {
       setIsLoading(false);
     }
-  };
+  };  
 
   const handleSubmit = async () => {
-
     if (!isBoxNumberSelected || !isGroupNameSelected) {
       Alert.alert('Error', 'Please fill in all fields.');
       return;
     }
 
     // Construct the item details string for the confirmation alert
-    const itemDetails = `
-Group Name: ${selectedGroupName}
+    const itemDetails = `Group Name: ${selectedGroupName} Box Number: ${selectedBoxNumber}`;
 
-Box Number: ${selectedBoxNumber}
-    `;
-
-    // Construct the API endpoint with the required parameters
+    // Change to google sheets aws url link
     const apiUrl = `https://fspshqdk9c.execute-api.us-east-1.amazonaws.com/?GroupName=${selectedGroupName}&BoxNumber=${selectedBoxNumber}`;
 
     // Show a confirmation alert before proceeding
     Alert.alert(
       'Confirm Submission',
-      `Are you sure you want to close the following box?\n\n${itemDetails}`,
+      `Are you sure you want to Export the following box?\n\n${itemDetails}`,
       [
         { text: 'Cancel', style: 'cancel' },
         {
@@ -169,12 +166,12 @@ Box Number: ${selectedBoxNumber}
                 // Success alert
                 Alert.alert(
                   'Success',
-                  `Successfully closed the box \n\n Group Name: ${selectedGroupName} Box Number: ${selectedBoxNumber}`,
+                  `Successfully exported the box \n\n Group Name: ${selectedGroupName} Box Number: ${selectedBoxNumber}`,
                   [{ text: 'OK', onPress: () => navigation.navigate('Home') }]
                 );
                 setIsLoading(false);
               } else {
-                Alert.alert('Error', 'Failed to close the box. Please try again.');
+                Alert.alert('Error', 'Failed to export the box. Please try again.');
               }
             } catch (error) {
               Alert.alert('Error', 'An error occurred. Please check your connection and try again.');
