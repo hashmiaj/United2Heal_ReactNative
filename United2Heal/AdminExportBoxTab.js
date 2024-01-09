@@ -137,13 +137,16 @@ const AdminExportBoxTab = () => {
       Alert.alert('Error', 'Please fill in all fields.');
       return;
     }
-
+  
     // Construct the item details string for the confirmation alert
-    const itemDetails = `Group Name: ${selectedGroupName} Box Number: ${selectedBoxNumber}`;
-
-    // Change to google sheets aws url link
-    const apiUrl = `https://fspshqdk9c.execute-api.us-east-1.amazonaws.com/?GroupName=${selectedGroupName}&BoxNumber=${selectedBoxNumber}`;
-
+    const itemDetails = `
+    Group Name: ${selectedGroupName}  
+    Box Number: ${selectedBoxNumber}
+    `;
+  
+    // Change to the URL of your AWS Lambda function for exporting to Google Sheets
+    const exportApiUrl = `https://s0jdg70bp9.execute-api.us-east-1.amazonaws.com/?groupName=${selectedGroupName}&boxNumber=${selectedBoxNumber}`;
+  
     // Show a confirmation alert before proceeding
     Alert.alert(
       'Confirm Submission',
@@ -155,19 +158,29 @@ const AdminExportBoxTab = () => {
           onPress: async () => {
             try {
               setIsLoading(true);
-
-              // Your existing code to make the API call
-              const response = await fetch(apiUrl, {
-                method: 'POST'
+  
+              // Make a request to the AWS Lambda function for exporting to Google Sheets
+              const response = await fetch(exportApiUrl, {
+                method: 'POST',
+                // Additional headers or body if required
               });
-
-              // Handle response and errors as before
+  
+              // Handle response and errors
               if (response.ok) {
                 // Success alert
                 Alert.alert(
                   'Success',
                   `Successfully exported the box \n\n Group Name: ${selectedGroupName} Box Number: ${selectedBoxNumber}`,
-                  [{ text: 'OK', onPress: () => navigation.navigate('Home') }]
+                  [
+                    {
+                      text: 'OK',
+                      onPress: async () => {
+                        // Redirect the user to the Google Sheets page or any other desired destination
+                        // Update the navigation logic based on your app structure
+                        navigation.navigate('GoogleSheetsPage');
+                      },
+                    },
+                  ]
                 );
                 setIsLoading(false);
               } else {
@@ -178,11 +191,12 @@ const AdminExportBoxTab = () => {
             } finally {
               setIsLoading(false);
             }
-          }
-        }
+          },
+        },
       ]
     );
   };
+  
 
   return (
     <View style={styles.container}>
