@@ -1,11 +1,14 @@
 import React, { useState, useCallback, useRef, useMemo, useEffect } from 'react';
+import { CommonActions } from '@react-navigation/native';
 import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
 import BottomSheet, { BottomSheetSectionList } from "@gorhom/bottom-sheet";
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { useNavigation } from '@react-navigation/native';
 import Divider from './Divider';
+import GoogleSheetsPage from './GoogleSheetsPage'; 
 
-const AdminCloseBoxTab = () => {
+
+const AdminExportBoxTab = () => {
   const navigation = useNavigation();
   const groupNamesBottomSheetRef = useRef(null);
   const boxNumbersBottomSheetRef = useRef(null);
@@ -64,7 +67,7 @@ const AdminCloseBoxTab = () => {
           setIsSubmitDisabled(false); // Enable submit button
           closeBottomSheet(groupNamesBottomSheetRef);
           setSelectedBoxNumber('1'); // Reset selected box number
-          setIsBoxNumberSelected(false); // Reset box number 
+          setIsBoxNumberSelected(false); // Reset box number selection status
         }}>
           <Text style={styles.groupText}>{item}</Text>
         </TouchableOpacity>
@@ -91,6 +94,7 @@ const AdminCloseBoxTab = () => {
     []
   );
 
+  //reset box number selection status
   const getGroupNames = async () => {
     if (groupNames.length > 0) {
       openBottomSheet(groupNamesBottomSheetRef);
@@ -117,78 +121,92 @@ const AdminCloseBoxTab = () => {
   const getBoxNumbers = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch(`https://9cqehg42f1.execute-api.us-east-1.amazonaws.com/?GroupName=${selectedGroupName}`);
-
+      const response = await fetch(`https://ktmkdjyf67.execute-api.us-east-1.amazonaws.com/getAllBoxes?groupName=${selectedGroupName}`);
+  
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-
+  
       const data = await response.json();
-      const boxes = Array.from(new Set(data.map(item => item.BoxNumber)));       
+      const boxes = Array.from(new Set(data.map(item => item.BoxNumber))); 
       setBoxNumbers(boxes);
       openBottomSheet(boxNumbersBottomSheetRef);
     } catch (error) {
-      Alert.alert('Error', error.message);  // Show the actual error message
+      Alert.alert('Error', error.message);
     } finally {
       setIsLoading(false);
     }
-  };
+  };  
 
   const handleSubmit = async () => {
-
     if (!isBoxNumberSelected || !isGroupNameSelected) {
       Alert.alert('Error', 'Please fill in all fields.');
       return;
     }
-
+  
     // Construct the item details string for the confirmation alert
     const itemDetails = `
-      Group Name: ${selectedGroupName}
-      Box Number: ${selectedBoxNumber}
+    Group Name: ${selectedGroupName}  
+    Box Number: ${selectedBoxNumber}
     `;
-
-    // Construct the API endpoint with the required parameters
-    const apiUrl = `https://fspshqdk9c.execute-api.us-east-1.amazonaws.com/?GroupName=${selectedGroupName}&BoxNumber=${selectedBoxNumber}`;
-
-    // Show a confirmation alert before proceeding
+  
+    // Change to the URL of your AWS Lambda function for exporting to Google Sheets
+    const exportApiUrl = `https://s0jdg70bp9.execute-api.us-east-1.amazonaws.com/?groupName=${selectedGroupName}&boxNumber=${selectedBoxNumber}`;
+  
     Alert.alert(
       'Confirm Submission',
-      `Are you sure you want to close the following box?\n\n${itemDetails}`,
+      `Are you sure you want to Export the following box?\n\n${itemDetails}`,
       [
         { text: 'Cancel', style: 'cancel' },
         {
-          text: 'OK',
+          text: 'Export',
           onPress: async () => {
             try {
               setIsLoading(true);
-
-              // Your existing code to make the API call
-              const response = await fetch(apiUrl, {
-                method: 'POST'
+    
+              const response = await fetch(exportApiUrl, {
+                method: 'POST',
               });
-
-              // Handle response and errors as before
+              console.log(response);
+    
+              // Handle response and errors
               if (response.ok) {
-                // Success alert
+                // Success alert with export options
                 Alert.alert(
                   'Success',
-                  `Successfully closed the box \n\n Group Name: ${selectedGroupName} Box Number: ${selectedBoxNumber}`,
-                  [{ text: 'OK', onPress: () => navigation.navigate('Home') }]
+                  `Successfully exported the box \n\n Group Name: ${selectedGroupName} Box Number: ${selectedBoxNumber}`,
+                  [
+                    {
+                      text: 'Okay',
+                      style: 'okay',
+                    },
+                    {
+                      text: 'Go to Google Sheets',
+                      onPress: () => {
+                        // Navigate to the Google Sheets page using React Navigation
+                        navigation.dispatch(
+                          CommonActions.navigate({
+                            name: 'GoogleSheetsPage',
+                          })
+                        );
+                      },
+                    },
+                  ]
                 );
-                setIsLoading(false);
               } else {
-                Alert.alert('Error', 'Failed to close the box. Please try again.');
+                Alert.alert('Error', 'Failed to export the box. Please try again.');
               }
             } catch (error) {
               Alert.alert('Error', 'An error occurred. Please check your connection and try again.');
             } finally {
               setIsLoading(false);
             }
-          }
-        }
+          },
+        },
       ]
-    );
+    );    
   };
+  
 
   return (
     <View style={styles.container}>
@@ -197,8 +215,8 @@ const AdminCloseBoxTab = () => {
           <ActivityIndicator size="large" color="#0000ff" />
         </View>
       }
-      <Text style={styles.title}>Close Box</Text>
-      <Text style={styles.paragraph}>Here you can close an existing box for a specific group.</Text>
+      <Text style={styles.title}>Export Box</Text>
+      <Text style={styles.paragraph}>Here you can export a box for a specific group to a Google Sheet.</Text>
       <TouchableOpacity style={styles.dropdownContainer} onPress={getGroupNames}>
         <Text style={styles.dropdownText}>{isGroupNameSelected ? selectedGroupName : 'Select Group'}</Text>
         <Icon style={{ position: 'absolute', right: 12 }} name='caret-down' size={22} color='#000000' />
@@ -209,7 +227,7 @@ const AdminCloseBoxTab = () => {
       </TouchableOpacity>
       <View style={styles.buttonsContainer}>
         <TouchableOpacity style={[styles.button]} onPress={handleSubmit}>
-          <Text style={styles.buttonText}>Close Box</Text>
+          <Text style={styles.buttonText}>Export Box</Text>
         </TouchableOpacity>
       </View>
       <BottomSheet
@@ -229,6 +247,7 @@ const AdminCloseBoxTab = () => {
           sections={[{ title: 'Select Group', data: groupNames }]}
           keyExtractor={(item) => item}
           renderItem={renderGroupItem}
+
           contentContainerStyle={styles.contentContainer}
         />
       </BottomSheet>
@@ -347,4 +366,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AdminCloseBoxTab;
+export default AdminExportBoxTab;
