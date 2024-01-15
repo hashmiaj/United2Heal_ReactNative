@@ -5,6 +5,8 @@ import BottomSheet, { BottomSheetSectionList } from "@gorhom/bottom-sheet";
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { useNavigation } from '@react-navigation/native';
 import Divider from './Divider';
+import GoogleSheetsPage from './GoogleSheetsPage'; 
+
 
 const AdminExportBoxTab = () => {
   const navigation = useNavigation();
@@ -151,7 +153,6 @@ const AdminExportBoxTab = () => {
     // Change to the URL of your AWS Lambda function for exporting to Google Sheets
     const exportApiUrl = `https://s0jdg70bp9.execute-api.us-east-1.amazonaws.com/?groupName=${selectedGroupName}&boxNumber=${selectedBoxNumber}`;
   
-    // Show a confirmation alert before proceeding
     Alert.alert(
       'Confirm Submission',
       `Are you sure you want to Export the following box?\n\n${itemDetails}`,
