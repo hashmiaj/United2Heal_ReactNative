@@ -63,6 +63,8 @@ const AdminCloseBoxTab = () => {
           setIsGroupNameSelected(true);
           setIsSubmitDisabled(false); // Enable submit button
           closeBottomSheet(groupNamesBottomSheetRef);
+          setSelectedBoxNumber('1'); // Reset selected box number
+          setIsBoxNumberSelected(false); // Reset box number 
         }}>
           <Text style={styles.groupText}>{item}</Text>
         </TouchableOpacity>
@@ -116,11 +118,13 @@ const AdminCloseBoxTab = () => {
     setIsLoading(true);
     try {
       const response = await fetch(`https://9cqehg42f1.execute-api.us-east-1.amazonaws.com/?GroupName=${selectedGroupName}`);
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
+
       const data = await response.json();
-      const boxes = data.map(item => item.BoxNumber);
+      const boxes = Array.from(new Set(data.map(item => item.BoxNumber)));       
       setBoxNumbers(boxes);
       openBottomSheet(boxNumbersBottomSheetRef);
     } catch (error) {
@@ -139,9 +143,8 @@ const AdminCloseBoxTab = () => {
 
     // Construct the item details string for the confirmation alert
     const itemDetails = `
-Group Name: ${selectedGroupName}
-
-Box Number: ${selectedBoxNumber}
+      Group Name: ${selectedGroupName}
+      Box Number: ${selectedBoxNumber}
     `;
 
     // Construct the API endpoint with the required parameters

@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useRef, useMemo, useEffect } from 'react';
+import { CommonActions } from '@react-navigation/native';
 import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
 import BottomSheet, { BottomSheetSectionList } from "@gorhom/bottom-sheet";
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -63,6 +64,8 @@ const AdminExportBoxTab = () => {
           setIsGroupNameSelected(true);
           setIsSubmitDisabled(false); // Enable submit button
           closeBottomSheet(groupNamesBottomSheetRef);
+          setSelectedBoxNumber('1'); // Reset selected box number
+          setIsBoxNumberSelected(false); // Reset box number selection status
         }}>
           <Text style={styles.groupText}>{item}</Text>
         </TouchableOpacity>
@@ -89,6 +92,7 @@ const AdminExportBoxTab = () => {
     []
   );
 
+  //reset box number selection status
   const getGroupNames = async () => {
     if (groupNames.length > 0) {
       openBottomSheet(groupNamesBottomSheetRef);
@@ -122,7 +126,7 @@ const AdminExportBoxTab = () => {
       }
   
       const data = await response.json();
-      const boxes = data.map(item => item.BoxNumber);
+      const boxes = Array.from(new Set(data.map(item => item.BoxNumber))); 
       setBoxNumbers(boxes);
       openBottomSheet(boxNumbersBottomSheetRef);
     } catch (error) {
@@ -154,35 +158,40 @@ const AdminExportBoxTab = () => {
       [
         { text: 'Cancel', style: 'cancel' },
         {
-          text: 'OK',
+          text: 'Export',
           onPress: async () => {
             try {
               setIsLoading(true);
-  
-              // Make a request to the AWS Lambda function for exporting to Google Sheets
+    
               const response = await fetch(exportApiUrl, {
                 method: 'POST',
-                // Additional headers or body if required
               });
-  
+              console.log(response);
+    
               // Handle response and errors
               if (response.ok) {
-                // Success alert
+                // Success alert with export options
                 Alert.alert(
                   'Success',
                   `Successfully exported the box \n\n Group Name: ${selectedGroupName} Box Number: ${selectedBoxNumber}`,
                   [
                     {
-                      text: 'OK',
-                      onPress: async () => {
-                        // Redirect the user to the Google Sheets page or any other desired destination
-                        // Update the navigation logic based on your app structure
-                        navigation.navigate('GoogleSheetsPage');
+                      text: 'Okay',
+                      style: 'okay',
+                    },
+                    {
+                      text: 'Go to Google Sheets',
+                      onPress: () => {
+                        // Navigate to the Google Sheets page using React Navigation
+                        navigation.dispatch(
+                          CommonActions.navigate({
+                            name: 'GoogleSheetsPage',
+                          })
+                        );
                       },
                     },
                   ]
                 );
-                setIsLoading(false);
               } else {
                 Alert.alert('Error', 'Failed to export the box. Please try again.');
               }
@@ -194,7 +203,7 @@ const AdminExportBoxTab = () => {
           },
         },
       ]
-    );
+    );    
   };
   
 
@@ -237,6 +246,7 @@ const AdminExportBoxTab = () => {
           sections={[{ title: 'Select Group', data: groupNames }]}
           keyExtractor={(item) => item}
           renderItem={renderGroupItem}
+
           contentContainerStyle={styles.contentContainer}
         />
       </BottomSheet>
