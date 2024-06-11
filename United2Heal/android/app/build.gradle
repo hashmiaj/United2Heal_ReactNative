@@ -73,13 +73,13 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.united2heal"
+    namespace "com.cftcunited2heal"
     defaultConfig {
-        applicationId "com.united2heal"
+        applicationId "com.cftcunited2heal"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 20
-        versionName "3.0.0"
+        versionCode 22
+        versionName "3.0.2"
     }
     signingConfigs {
         release {
